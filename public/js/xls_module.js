@@ -104,6 +104,7 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 			$scope.read = function (workbook) {
 		     /* DO SOMETHING WITH workbook HERE */
 		        var _layout = workbook;
+		        var _token = angular.element(document.querySelector("input[name='_token']")).val();
 		        $timeout(function() {
 			        var _common_sheet = workbook.Sheets["Proveedor_Clientes"];
 			        var _provider = {
@@ -116,6 +117,36 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 			        	sheets: [],
 			        	type: undefined
 			        };
+			        
+			        var prov_id = undefined;
+			        var _new_provider = {
+		    		method: 'POST',
+				    	url: $scope.uri+'/proveedores',
+				    	headers: {
+				    		'X-CSRF-TOKEN': _token
+				    	},
+				    	data: {
+				    		ruc: _provider.ruc,
+				    		nombre: _provider.name,
+				    		cuenta: _provider.account_number
+				    	}
+			    	};
+
+			    	$http(_new_provider).then(
+			    		function(data){
+			    			//console.log('leonel');
+			    			//console.log(data.data.id_provider);
+			    			prov_id = data.data.id_provider;
+			    			console.log(prov_id);
+			    		},
+			    		function(error){
+			    			console.log(error);
+			    		}
+			    	);
+			    	console.log(prov_id);
+
+
+
 			        $http.get($scope.uri+'/proveedores/'+_provider.ruc).then(
 			        	function(data) {
 			        		_provider.id = data.data.id;
@@ -181,7 +212,7 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 		    		if (item.type == sheet) {
 		    			item.active = 'active';
 		    			$scope.sheet_selected = item;
-		    			console.log("ininid");
+		    			//console.log("ininid");
 		    			$scope.choiceSheet(sheet);
 		    		}
 		    	});
@@ -228,7 +259,7 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 		    	var _token = angular.element(document.querySelector("input[name='_token']")).val();
 		    	console.log(_token);
 		    	//console.log(_token);
-		    	var _new_provider = {
+		    	/*var _new_provider = {
 		    		method: 'POST',
 			    	url: $scope.uri+'/proveedores',
 			    	headers: {
@@ -250,7 +281,7 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 		    		function(error){
 		    			console.log(error);
 		    		}
-		    	);
+		    	);*/
 
 		    	angular.forEach($scope.provider.sheets, function(item) {
 		    		angular.forEach(item.table, function(row) {

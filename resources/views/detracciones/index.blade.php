@@ -166,7 +166,7 @@
 								Estado del Archivo Excel 
 							</h2>
 							{{csrf_field()}}
-							<button class="pull-right btn btn-default btn-sm" ng-if="verifyInsert() == true" ng-click="export(current_sheet.type)">
+							<button class="pull-right btn btn-primary btn-sm" ng-if="verifyInsert() == true" ng-click="export(current_sheet.type)">
 								Export en .txt
 							</button>
 							<ul class="nav nav-tabs">
