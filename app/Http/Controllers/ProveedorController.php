@@ -35,26 +35,11 @@ class ProveedorController extends Controller
      */
     public function store(Request $request)
     {
-        /*$messages = [
-            'ruc.unique' => 'El RUC ya esta en uso',
-            'cuenta.unique' => 'El numero de cuenta ya esta en uso'
-        ];
-        $v = \Validator::make($request->all(),[
-                'ruc'=>'unique:proveedores|required|max:11',
-                'cuenta'=>'required|unique:proveedores,nro_cuenta',
-                'nombre'=>'required'
-            ], $messages)->validate();*/
         $proveedor = Proveedor::firstOrCreate([
                 'ruc'=> $request->get('ruc'),
                 'nro_cuenta' => $request->get('cuenta'),
                 'nombre' => $request->get('nombre')
             ]);
-
-        /*$proveedor = new Proveedor();
-        $proveedor->ruc = $request->get('ruc');
-        $proveedor->nro_cuenta = $request->get('cuenta');
-        $proveedor->nombre = $request->get('nombre');
-        $proveedor->save();*/
        
         return response()->json(['proveedor_insertado'=>true,'id_provider'=>$proveedor->id]);
     }
@@ -105,5 +90,41 @@ class ProveedorController extends Controller
     public function destroy(Proveedor $proveedor)
     {
         //
+    }
+
+    public function do_store(Request $request){
+
+        //dd($request->all());
+        $messages = [
+            'ruc.unique:proveedores,ruc' => 'El RUC ya esta en uso',
+            'cuenta.unique:proveedores,nro_cuenta' => 'El numero de cuenta ya esta en uso',
+            'nombre.required'    => 'ya esta en uso'
+        ];
+
+        /*$v=\Validator::make($request->all(),[
+            'ruc'=>'required|unique:proveedores,ruc|max:11',
+            'cuenta'=>'required|unique:proveedores,nro_cuenta',
+            'nombre'=>'required'
+        ], $messages);*/
+
+        $v = $this->validate($request,[
+                'ruc'=>'required|unique:proveedores,ruc|max:11',
+                'cuenta'=>'required|unique:proveedores,nro_cuenta',
+                'nombre'=>'required'
+            ]);
+
+        if($v->fails()){
+            return response()->json($v);
+        }
+
+        $proveedor = new Proveedor();
+        $proveedor->ruc = $request->get('ruc');
+        $proveedor->nro_cuenta = $request->get('cuenta');
+        $proveedor->nombre = $request->get('nombre');
+        $proveedor->save();
+
+        return response()->json(['proveedor_insertado'=>true]);
+
+
     }
 }

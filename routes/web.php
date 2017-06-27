@@ -21,4 +21,5 @@ Route::group(['middleware'=>'auth'],function(){
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::resource('detracciones','DetraccionController');
 	Route::resource('proveedores','ProveedorController');
+	Route::post('/provider_add','ProveedorController@do_store');
 });

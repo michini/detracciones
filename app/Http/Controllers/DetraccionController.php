@@ -35,6 +35,11 @@ class DetraccionController extends Controller
      */
     public function store(Request $request)
     {
+
+        /*\Validator::make($request->all(),[
+                ''
+            ]);*/
+
         $detr = new Detraccion();
         $detr->tipo = $request->get('tipo');
         $detr->numero = $request->get('numero');

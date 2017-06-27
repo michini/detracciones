@@ -12,6 +12,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{asset('js/angular-toastr-master/dist/angular-toastr.min.css')}}">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -86,6 +88,8 @@
     <script type="text/javascript" src="{{asset('js/xls_module.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/angular/xlsx.full.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/angular/angular-js-xls.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/angular-toastr-master/dist/angular-toastr.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/angular-toastr-master/dist/angular-toastr.tpls.min.js')}}"></script>
     @yield('js')
 </body>
 </html>

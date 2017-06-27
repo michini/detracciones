@@ -26,11 +26,15 @@
 						</div>
 						<div class="col-sm-12" ng-if="provider != undefined">
 							<form class="form-horizontal">
-							<span class="pull-right text-danger" style="cursor: pointer;" ng-click="returnFile()" ng-if="type_selected.type == 'format'">Cambiar documento</span>
-							<h2>Datos del Proveedor <% provider.id %></h2>
+							<div class="btn-group btn-group-xs pull-right" role="group" aria-label="...">
+								<button class="btn btn-default" type="button" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="glyphicon glyphicon-plus-sign"></i> Nuevo proveedor</button>
+								<button class="btn btn-danger" ng-click="returnFile()" ng-if="type_selected.type == 'format'"><i class="glyphicon glyphicon-book"></i> Cambiar documento</button>
+							</div>
+							<!--<span class="pull-right text-danger" style="cursor: pointer;" ng-click="returnFile()" ng-if="type_selected.type == 'format'">Cambiar documento</span>-->
+							<h3>Datos del Proveedor <% provider.id %></h3>
 							  <div class="form-group">
 							    <label for="ruc" class="col-sm-2 control-label">RUC:</label>
-							    <div class="col-sm-4">
+							    <div class="col-sm-2">
 							      <input type="text" class="form-control" ng-if="type_selected.type == 'format'" id="ruc" ng-model="provider.ruc" readonly="">
 							      <div class="input-group" ng-if="type_selected.type == 'manual'">
 							      	<input type="text"  maxlength="11" pattern="[0-9]{11}" class="form-control" ng-if="type_selected.type == 'manual'" id="ruc" ng-model="provider.ruc">
@@ -42,27 +46,28 @@
 							      </div>
 							    </div>
 
-							    <label for="lote" class="col-sm-2 control-label">Nº lote:</label>
-							    <div class="col-sm-4">
+							    <label for="lote" class="col-sm-2 col-sm-offset-1 control-label">Nº lote:</label>
+							    <div class="col-sm-2">
 							      <input type="text" class="form-control" ng-if="type_selected.type =='format'" id="lote" ng-model="provider.lote" readonly="">
 							      <input type="text" class="form-control" ng-if="type_selected.type =='manual' && provider.name == undefined" id="lote" ng-model="provider.lote" readonly="">
 							      <input type="text" class="form-control" ng-if="type_selected.type =='manual' && provider.name != undefined" id="lote" ng-model="provider.lote">
 							    </div>
+							    
 							  </div>
 							  <div class="form-group">
 							    <label for="proveedor" class="col-sm-2 control-label">Proveedor:</label>
-							    <div class="col-sm-4">
+							    <div class="col-sm-3">
 							      <input type="text" class="form-control" id="proveedor" ng-model="provider.name" readonly="readonly">
 							    </div>
 
 							    <label for="importe" class="col-sm-2 control-label">Importe:</label>
-							    <div class="col-sm-4">
+							    <div class="col-sm-2">
 							      <input type="text" class="form-control" id="importe" value="<% current_sheet.import | number:'2'%>" readonly="">
 							    </div>
 							  </div>
 							  <div class="form-group">
 							    <label for="cuenta" class="col-sm-2 control-label">Nº cuenta:</label>
-							    <div class="col-sm-4">
+							    <div class="col-sm-2">
 							      <input type="text" class="form-control " id="cuenta" ng-model="provider.account_number" readonly="">
 							    </div>
 							    <div class="col-sm-3 radio text-center" ng-if="type_selected.type == 'manual'">
@@ -220,12 +225,60 @@
 					    </div>
 					  </div>-->
 					  
-					
 				</div>
 			</div>
 		</div>
+					<!-- start modal -->
+					<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+					  <div class="modal-dialog modal-sm" role="document" style="left: 0%;">
+					    <div class="modal-content">
+					     		<div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						        <h4 class="modal-title">Nuevo proveedor</h4>
+						      </div>
+						      <div class="modal-body">
+						        <form class="form-horizontal">
+						        	<div class="container">
+						        		<div class="col-sm-12">
+						        			<div class="form-group">
+						        				<label class="control-label col-sm-2">RUC:</label>
+						        				<div class="col-sm-3">
+						        					<input type="text" class="form-control" ng-model="new_provider_ruc" autocomplete="off">
+						        				</div>
+						        			</div>
+						        			<div class="form-group">
+						        				<label class="control-label col-sm-2">Razon social:</label>
+						        				<div class="col-sm-3">
+						        					<input type="text" class="form-control" ng-model="new_provider_razon" autocomplete="off">
+						        				</div>
+						        			</div>
+						        			<div class="form-group">
+						        				<label class="control-label col-sm-2">Cuenta:</label>
+						        				<div class="col-sm-3">
+						        					<input type="text" class="form-control" ng-model="new_provider_account" autocomplete="off">
+						        				</div>
+						        			</div>
+						        			<div class="form-group">
+						        				<div class="col-sm-3 col-sm-offset-2">
+						        					<button type="button" class="btn btn-primary btn-sm" ng-click="create_provider()"><i class="glyphicon glyphicon-floppy-disk"></i> Guardar</button>
+						        				</div>
+						        			</div>
+						        		</div>
+						        	</div>
+						        </form>
+						      </div>
+					    </div>
+					  </div>
+					</div>
+					<!-- end modal -->
 	</div>
 @endsection
 @section('js')
-
+<script type="text/javascript">
+	$('document').ready(function(){
+		$('#myModal').modal('show');
+	});
+	
+	
+</script>
 @endsection

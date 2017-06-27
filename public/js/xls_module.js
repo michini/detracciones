@@ -10,12 +10,14 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 		"$http",
 		"FileSaver",
 		"Blob",
+		
 		function(
 			$scope,
 			$timeout,
 			$http,
 			FileSaver,
-			Blob
+			Blob,
+			
 		)
 		{
 			$scope.init = function() {
@@ -258,30 +260,6 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 		    $scope.save = function() {
 		    	var _token = angular.element(document.querySelector("input[name='_token']")).val();
 		    	console.log(_token);
-		    	//console.log(_token);
-		    	/*var _new_provider = {
-		    		method: 'POST',
-			    	url: $scope.uri+'/proveedores',
-			    	headers: {
-			    		'X-CSRF-TOKEN': _token
-			    	},
-			    	data: {
-			    		ruc: $scope.provider.ruc,
-			    		nombre: $scope.provider.name,
-			    		cuenta: $scope.provider.account_number
-			    	}
-		    	};
-
-		    	$http(_new_provider).then(
-		    		function(data){
-		    			//console.log('leonel');
-		    			console.log(data.data.id_provider);
-		    			$scope.provider.id = data.data.id_provider;
-		    		},
-		    		function(error){
-		    			console.log(error);
-		    		}
-		    	);*/
 
 		    	angular.forEach($scope.provider.sheets, function(item) {
 		    		angular.forEach(item.table, function(row) {
@@ -361,6 +339,34 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 			    var s = num+"";
 			    while (s.length < size) s = "0" + s;
 			    return s;
+			}
+
+			$scope.create_provider = function(){
+				var _token = angular.element(document.querySelector("input[name='_token']")).val();
+				var new_prov = {
+					method: 'POST',
+			    	url: $scope.uri+'/provider_add',
+			    	headers: {
+			    		'X-CSRF-TOKEN': _token
+			    	},
+			    	data: {
+						nombre: $scope.new_provider_razon,
+						cuenta: $scope.new_provider_account,
+						ruc: $scope.new_provider_ruc,
+						data_sent: true
+			    	}
+				};
+
+				$http(new_prov).then(
+					function(data){
+						toastr.success('sdadsd','ddsd');
+						console.log(data);
+					},
+					function(error){
+						toastr.error('sdadsd','ddsd');
+						console.log(error);
+					}
+				)
 			}
 
 		}
