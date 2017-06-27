@@ -359,11 +359,11 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 
 				$http(new_prov).then(
 					function(data){
-						toastr.success('sdadsd','ddsd');
+						
 						console.log(data);
 					},
 					function(error){
-						toastr.error('sdadsd','ddsd');
+						
 						console.log(error);
 					}
 				)
