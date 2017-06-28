@@ -359,11 +359,16 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 
 				$http(new_prov).then(
 					function(data){
-						
+						toastr.success(data.data.msg,'Mensaje');
 						console.log(data);
 					},
 					function(error){
 						
+						toastr.error(!jQuery.isEmptyObject(error.data.ruc) ? error.data.ruc : ' ','Mensaje')
+						toastr.error(!jQuery.isEmptyObject(error.data.nombre) ? error.data.nombre : ' ','Mensaje')
+						toastr.error(!jQuery.isEmptyObject(error.data.cuenta) ? error.data.cuenta : ' ','Mensaje')
+						
+						console.log(error.data.ruc.length);
 						console.log(error);
 					}
 				)

@@ -167,9 +167,9 @@
 							&nbsp;<button class="pull-right btn btn-success btn-sm" value="Guardar" ng-click="save()" ng-disabled="verifyInsert() == true">
 								Guardar
 							</button>&nbsp;
-							<h2>
+							<h3>
 								Estado del Archivo Excel 
-							</h2>
+							</h3>
 							{{csrf_field()}}
 							<button class="pull-right btn btn-primary btn-sm" ng-if="verifyInsert() == true" ng-click="export(current_sheet.type)">
 								Export en .txt

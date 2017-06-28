@@ -96,26 +96,16 @@ class ProveedorController extends Controller
 
         //dd($request->all());
         $messages = [
-            'ruc.unique:proveedores,ruc' => 'El RUC ya esta en uso',
-            'cuenta.unique:proveedores,nro_cuenta' => 'El numero de cuenta ya esta en uso',
-            'nombre.required'    => 'ya esta en uso'
+            'ruc.unique' => 'El RUC ya esta registrado',
+            'cuenta.unique' => 'El numero de cuenta ya esta registrado',
+            'nombre.required'    => 'El nombre es un campo obligatorio'
         ];
 
-        /*$v=\Validator::make($request->all(),[
+        $v=\Validator::make($request->all(),[
             'ruc'=>'required|unique:proveedores,ruc|max:11',
             'cuenta'=>'required|unique:proveedores,nro_cuenta',
             'nombre'=>'required'
-        ], $messages);*/
-
-        $v = $this->validate($request,[
-                'ruc'=>'required|unique:proveedores,ruc|max:11',
-                'cuenta'=>'required|unique:proveedores,nro_cuenta',
-                'nombre'=>'required'
-            ]);
-
-        if($v->fails()){
-            return response()->json($v);
-        }
+        ], $messages)->validate();
 
         $proveedor = new Proveedor();
         $proveedor->ruc = $request->get('ruc');
@@ -123,7 +113,22 @@ class ProveedorController extends Controller
         $proveedor->nombre = $request->get('nombre');
         $proveedor->save();
 
-        return response()->json(['proveedor_insertado'=>true]);
+        /*$v = $this->validate($request,[
+                'ruc'=>'required|unique:proveedores,ruc|max:11',
+                'cuenta'=>'required|unique:proveedores,nro_cuenta',
+                'nombre'=>'required'
+            ]);
+
+        if(!$v->fails()){
+            
+            
+        }else{
+            return response()->json($v);
+        }*/
+
+        
+
+        return response()->json(['proveedor_insertado'=>true,'msg'=>'Proveedor insertado.']);
 
 
     }
