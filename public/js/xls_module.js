@@ -27,6 +27,11 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 						type: 'format',
 						name: 'Formato',
 						skin: 'warning'
+					},
+					{
+						type: 'manual',
+						name: 'Manual',
+						skin: 'success'
 					}
 				];
 				$scope.types_sheets = [

@@ -39,7 +39,18 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Proveedores <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li><a href="{{route('proveedores.create')}}"><i class="glyphicon glyphicon-plus-sign"></i> Nuevo</a></li>
+                            <li><a href="{{route('proveedores.index')}}"><i class="glyphicon glyphicon-th"></i> Listar</a></li>
+                            <!--<li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">One more separated link</a></li>-->
+                          </ul>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -57,7 +68,7 @@
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                     document.getElementById('logout-form').submit();"><i class="glyphicon glyphicon-log-out"></i>
                                             Salir
                                         </a>
 
