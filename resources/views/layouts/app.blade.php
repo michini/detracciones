@@ -38,6 +38,7 @@
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
+                    {{-- @if(Auth::check()) 
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Proveedores <span class="caret"></span></a>
@@ -52,6 +53,7 @@
                           </ul>
                         </li>
                     </ul>
+                    @endif --}}
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">

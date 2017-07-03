@@ -53,8 +53,12 @@ class ProveedorController extends Controller
     public function show(Request $request,$id)
     {
         
-        $provider = \DB::table('proveedores')->select('*')->where('ruc',$id)->first();
-        //dd(Proveedor::first($id));
+        //$provider = \DB::table('proveedores')->select('*')->where('ruc',$id)->first();
+        //dd($id);
+        $provider = Proveedor::where('ruc',$id)->firstOrFail()->toArray();
+        if(!$provider){
+            return response()->json(['msg'=>'RUC mal escrito o no existe.']);
+        }
         return response()->json($provider);
     }
 
