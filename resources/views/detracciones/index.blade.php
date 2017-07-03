@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+{{csrf_field()}}
 	<div class="container-fluid" ng-app="xlsApp" ng-controller="exportCtrl" ng-init="init()">
 		<div class="col-lg-12">
 			<div class="panel panel-default">
@@ -52,7 +53,7 @@
 							      <input type="text" class="form-control" ng-if="type_selected.type =='manual' && provider.name == undefined" id="lote" ng-model="provider.lote" readonly="">
 							      <input type="text" class="form-control" ng-if="type_selected.type =='manual' && provider.name != undefined" id="lote" ng-model="provider.lote">
 							    </div>
-							    
+
 							  </div>
 							  <div class="form-group">
 							    <label for="proveedor" class="col-sm-2 control-label">Proveedor:</label>
@@ -62,7 +63,8 @@
 
 							    <label for="importe" class="col-sm-2 control-label">Importe:</label>
 							    <div class="col-sm-2">
-							      <input type="text" class="form-control" id="importe" value="<% current_sheet.import | number:'2'%>" readonly="">
+							      <input type="text" class="form-control" id="importe" ng-if="type_selected.type =='format'" value="<% current_sheet.import | number:'2'%>" readonly="">
+							      <input type="text" class="form-control" id="importe" ng-if="type_selected.type =='manual'" ng-model="provider.import"readonly="">
 							    </div>
 							  </div>
 							  <div class="form-group">
@@ -72,13 +74,13 @@
 							    </div>
 							    <div class="col-sm-3 radio text-center" ng-if="type_selected.type == 'manual'">
 								    <label>
-								    	<input type="radio" name="type" value="provider" ng-model="provide.type">
+								    	<input type="radio" name="type" value="provider" ng-model="provider.type">
 								    	Proveedor
 								    </label>
 							    </div>
 							    <div class="col-sm-3 radio text-center" ng-if="type_selected.type == 'manual'">
 								    <label>
-								    	<input type="radio" name="type" value="client" ng-model="provide.type">
+								    	<input type="radio" name="type" value="client" ng-model="provider.type">
 								    	Cliente
 								    </label>
 							    </div>
@@ -90,16 +92,19 @@
 							<div class="col-sm-12" ng-if="provider.name != undefined && provider.lote != undefined && provider.type != undefined">
 								<div class="form-group">
 									<button class="btn btn-default" ng-click="addRow()">Agregar Fila</button>
+									<button class="pull-right btn btn-primary btn-sm" ng-if="verifyExists() == true && provider.table.length>0" ng-click="export(current_sheet.type)">
+										Export en .txt
+									</button>
 								</div>
 								<hr>
 								<div class="table-responsive" ng-if="provider.table.length >0 " style="max-height:400px; overflow:auto;">
 								  <table class="table table-bordered">
 								  	<thead>
 								  		<tr style="background-color: #444; color:#fff;">
-								  			<th  class="text-center" rowspan="2">Nº</th>
 								  			<th  class="text-center" colspan="3">Datos del Cliente</th>
-								  			<th  class="text-center" colspan="5">Informacion acerca del Deposito</th>
+								  			<th  class="text-center" colspan="<% getColumnWidth(provider.type) %>">Informacion acerca del Deposito</th>
 								  			<th  class="text-center" colspan="3">Datos del Comprobante</th>
+								  			<th class="text-center" rowspan="2" style="vertical-align: middle">Acción</th>
 								  		</tr>
 								  		<tr style="background-color: #444; color:#fff;">
 								  			<th  class="text-center">Tipo</th>
@@ -107,54 +112,74 @@
 								  			<th  class="text-center">Nombre / Razon Social</th>
 								  			<th  class="text-center">Prof.</th>
 								  			<th  class="text-center">B/S</th>
+								  			<th  class="text-center" ng-if="provider.type == 'client'">Cuenta</th>
 								  			<th  class="text-center">Imp</th>
 								  			<th  class="text-center">Tipo</th>
 								  			<th  class="text-center">Period</th>
 								  			<th  class="text-center">Tipo</th>
 								  			<th  class="text-center">Serie</th>
 								  			<th  class="text-center">Numero</th>
-								  			
 								  		</tr>
 								  	</thead>
-								  	<tbody>
+								  	<tbody class="tabla">
 								  		<form name="new_row">
-									  		<tr ng-repeat="row in provider.table">
+									  		<tr ng-repeat="row in provider.table" ng-if="(row.deposit.account != undefined && provider.type == 'client') || (row.deposit.account == undefined && provider.type == 'provider')">
 									  			<td>
-									  				<% $index + 1 %>
+									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.client.type" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.client.type %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.tipo_operacion_proveedor" required>
+									  				<input type="text" style="width: 110px;" class="form-control" name="" ng-model="row.client.number" ng-keyup="findProvider(row.client.number, row)" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.client.number %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 110px;" class="form-control" name="" ng-model="row.ruc_proveedor" required>
+									  				<input type="text" style="width: 250px;" class="form-control" name="" ng-model="row.client.name" readonly="" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.client.name %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 250px;" class="form-control" name="" ng-model="row.razon_social" required>
+									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.deposit.proform" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.deposit.proform %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.numero_proforma" required>
+									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.deposit.service" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.deposit.service %></span>
+									  			</td>
+													<td ng-if="provider.type == 'client'">
+														<input type="text" style="width: 60px;" class="form-control" name="" ng-model="row.deposit.account" readonly="" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.deposit.account %></span>
+													</td>
+									  			<td>
+									  				<input type="text" style="width: 60px;" class="form-control" name="" ng-model="row.deposit.import" ng-keyup="getImport()" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.deposit.import %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.bien_servicio" required>
+									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.deposit.operation" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.deposit.operation %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 60px;" class="form-control" name="" ng-model="row.importe" required>
+									  				<input type="text" style="width: 80px;" class="form-control" name="" ng-model="row.deposit.period" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.deposit.period %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.tipo_operacion" required>
+									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.voucher.comprobant" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.voucher.comprobant %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 80px;" class="form-control" name="" ng-model="row.periodo" required>
+									  				<input type="text" style="width: 80px;" class="form-control" name="" ng-model="row.voucher.serie" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.voucher.serie %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.tipo_comprobante" required>
+									  				<input type="text" style="width: 60px;" class="form-control" name="" ng-model="row.voucher.comprobant_number" required ng-if="row.validated == false || row.validated == undefined">
+														<span ng-if="row.validated == true"><% row.voucher.comprobant_number %></span>
 									  			</td>
-									  			<td>
-									  				<input type="text" style="width: 80px;" class="form-control" name="" ng-model="row.serie" required>
-									  			</td>
-									  			<td>
-									  				<input type="text" style="width: 60px;" class="form-control" name="" ng-model="row.numero_comprobante" required>
-									  			</td>
+													<td class="text-center">
+														<span class="btn btn-sm btn-default" ng-click="saveRow(row)">
+															<span class="glyphicon glyphicon-floppy-save"></span>
+														</span>
+														<span class="btn btn-sm btn-default" ng-click="row.validated = false">
+															<span class="glyphicon glyphicon-pencil"></span>
+														</span>
+													</td>
 									  		</tr>
 									  	</form>
 								  	</tbody>
@@ -168,9 +193,9 @@
 								Guardar
 							</button>&nbsp;
 							<h3>
-								Estado del Archivo Excel 
+								Estado del Archivo Excel
 							</h3>
-							{{csrf_field()}}
+
 							<button class="pull-right btn btn-primary btn-sm" ng-if="verifyInsert() == true" ng-click="export(current_sheet.type)">
 								Export en .txt
 							</button>
@@ -217,14 +242,14 @@
 							  	</tbody>
 							  </table>
 							</div>
-						</div>	
+						</div>
 					</div>
 					  <!--<div class="form-group">
 					    <div class="col-sm-offset-2 col-sm-10">
 					      <button type="submit" class="btn btn-default">Sign in</button>
 					    </div>
 					  </div>-->
-					  
+
 				</div>
 			</div>
 		</div>
@@ -278,7 +303,7 @@
 	$('document').ready(function(){
 		$('#myModal').modal('show');
 	});
-	
-	
+
+
 </script>
 @endsection
