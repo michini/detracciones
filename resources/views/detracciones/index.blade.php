@@ -173,6 +173,7 @@
 														<span ng-if="row.validated == true"><% row.voucher.comprobant_number %></span>
 									  			</td>
 													<td class="text-center">
+														<input type="hidden" ng-model="getInsertId"> <!-- añadido -->
 														<span class="btn btn-sm btn-default" ng-click="saveRow(row)">
 															<span class="glyphicon glyphicon-floppy-save"></span>
 														</span>

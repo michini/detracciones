@@ -364,9 +364,18 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 
 					$http(_new).then(
 						function(data) {
+							if(data.data.insert){
+								toastr.success(data.data.msg+' '+data.data.id,'Correcto');
+								$scope.getInsertId = data.data.id
+							}
+							
 							row.validated = data.data.insert;
+							console.log(data);
 						},
 						function(error) {
+							if(!data.data.insert){
+								toastr.error('Intente nuevamente','Error');
+							}
 							console.log(error);
 						}
 					);
@@ -374,7 +383,7 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 				if (row.validated == false) {
 					var _new = {
 						method: 'PUT',
-						url: $scope.uri+'/detracciones',
+						url: $scope.uri+'/detracciones/'+$scope.getInsertId,
 						headers: {
 							'X-CSRF-TOKEN': $scope._token
 						},
@@ -397,9 +406,16 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 
 					$http(_new).then(
 						function(data) {
+							if(data.data.updated){
+								toastr.success(data.data.msg+' '+data.data.id,'Correcto');
+								$scope.getInsertId = data.data.id
+							}
 							row.validated = data.data.insert;
 						},
 						function(error) {
+							if(!data.data.updated){
+								toastr.error('Intente nuevamente','Error');
+							}
 							console.log(error);
 						}
 					);

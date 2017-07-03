@@ -55,7 +55,7 @@ class DetraccionController extends Controller
         $detr->comprobante_numero = $request->get('comprobante_numero');
         $detr->id_proveedor = $request->get('id_proveedor');
         $detr->save();                    
-        return response()->json(['insert'=>true]);
+        return response()->json(['insert'=>true,'id'=>$detr->id,'msg'=>'Fila insertada.']);
     }
 
     /**
@@ -87,9 +87,26 @@ class DetraccionController extends Controller
      * @param  \App\Detracciones  $detracciones
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Detracciones $detracciones)
+    public function update(Request $request, $id)
     {
-        //
+        //dd($request->all());
+        $detr = Detraccion::findOrFail($id);
+        $detr->tipo = $request->get('tipo');
+        $detr->numero = $request->get('numero');
+        $detr->razon_social = $request->get('razon_social');
+        $detr->nro_proforma = $request->get('nro_proforma');
+        $detr->bien_servicio = $request->get('bien_servicio');
+        $detr->cuenta = $request->get('cuenta');
+        $detr->importe = $request->get('importe');
+        $detr->operacion = $request->get('operacion');
+        $detr->periodo = $request->get('periodo');
+        $detr->comprobante = $request->get('comprobante');
+        $detr->serie = $request->get('serie');
+        $detr->comprobante_numero = $request->get('comprobante_numero');
+        $detr->id_proveedor = $request->get('id_proveedor');
+        $detr->save();    
+        
+        return response()->json(['updated'=>true,'msg'=>'Fila actualizada.']);
     }
 
     /**
