@@ -64,7 +64,7 @@
 							    <label for="importe" class="col-sm-2 control-label">Importe:</label>
 							    <div class="col-sm-2">
 							      <input type="text" class="form-control" id="importe" ng-if="type_selected.type =='format'" value="<% current_sheet.import | number:'2'%>" readonly="">
-							      <input type="text" class="form-control" id="importe" ng-if="type_selected.type =='manual'" value="<% getImport() | number:'2'%>" readonly="">
+							      <input type="text" class="form-control" id="importe" ng-if="type_selected.type =='manual'" ng-model="provider.import"readonly="">
 							    </div>
 							  </div>
 							  <div class="form-group">
@@ -149,7 +149,7 @@
 														<span ng-if="row.validated == true"><% row.deposit.account %></span>
 													</td>
 									  			<td>
-									  				<input type="text" style="width: 60px;" class="form-control" name="" ng-model="row.deposit.import" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 60px;" class="form-control" name="" ng-model="row.deposit.import" ng-keyup="getImport()" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.deposit.import %></span>
 									  			</td>
 									  			<td>

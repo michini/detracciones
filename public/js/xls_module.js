@@ -303,18 +303,20 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 				}
 				if ($scope.type_selected.type == 'manual') {
 					if ($scope.provider.table.length >0) {
-						console.log("entre");
 						var sum_provider = 0;
 						var sum_client = 0;
 						angular.forEach($scope.provider.table, function(item) {
-							if ($scope.provider.type == 'provider') {
+							if ($scope.provider.type == 'provider' && item.deposit.account == undefined)
+							{
+								console.log("provider");
 								sum_provider += parseFloat(item.deposit.import);
 							}
 							else {
+								console.log("client");
 								sum_client += parseFloat(item.deposit.import);
 							}
 						});
-						return ($scope.provider.type == 'client') ? sum_client : sum_provider;
+						$scope.provider.import = ($scope.provider.type == 'client') ? sum_client : sum_provider;
 					}
 				}
 	    };
@@ -424,7 +426,7 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 							_export = item;
 							_export.to_export = "";
 							var _header = "";
-							_header += "*"+$scope.provider.ruc+$scope.provider.name.substr(0,35)+$scope.provider.lote+_export.import;
+							_header += "*"+$scope.provider.ruc+$scope.provider.name.substr(0,35)+$scope.provider.lote+$scope.provider.import;
 							_export.to_export += _header+"\r\n";
 							angular.forEach(_export.table, function(item) {
 								var _proform = $scope.leading(item.deposit.proform,9);
