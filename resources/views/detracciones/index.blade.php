@@ -123,7 +123,7 @@
 								  	</thead>
 								  	<tbody class="tabla">
 								  		<form name="new_row">
-									  		<tr ng-repeat="row in provider.table" ng-if="(row.deposit.account == 0 && provider.type == 'client') || (row.deposit.account == undefined && provider.type == 'provider')">
+									  		<tr ng-repeat="row in provider.table" ng-if="(row.deposit.account != undefined && provider.type == 'client') || (row.deposit.account == undefined && provider.type == 'provider')">
 									  			<td>
 									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.client.type" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.client.type %></span>
