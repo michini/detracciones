@@ -54,7 +54,7 @@ class DetraccionController extends Controller
         $detr->serie = $request->get('serie');
         $detr->comprobante_numero = $request->get('comprobante_numero');
         $detr->id_proveedor = $request->get('id_proveedor');
-        $detr->save();                    
+        $detr->save();
         return response()->json(['insert'=>true,'id'=>$detr->id,'msg'=>'Fila insertada.']);
     }
 
@@ -104,9 +104,9 @@ class DetraccionController extends Controller
         $detr->serie = $request->get('serie');
         $detr->comprobante_numero = $request->get('comprobante_numero');
         $detr->id_proveedor = $request->get('id_proveedor');
-        $detr->save();    
-        
-        return response()->json(['updated'=>true,'msg'=>'Fila actualizada.']);
+        $detr->save();
+
+        return response()->json(['updated'=>true,'msg'=>'Fila actualizada.', 'id' => $detr->id]);
     }
 
     /**

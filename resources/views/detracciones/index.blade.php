@@ -75,13 +75,13 @@
 							    <div class="col-sm-3 radio text-center" ng-if="type_selected.type == 'manual'">
 								    <label>
 								    	<input type="radio" name="type" value="provider" ng-model="provider.type">
-								    	Proveedor
+								    	Cliente
 								    </label>
 							    </div>
 							    <div class="col-sm-3 radio text-center" ng-if="type_selected.type == 'manual'">
 								    <label>
 								    	<input type="radio" name="type" value="client" ng-model="provider.type">
-								    	Cliente
+								    	Proveedor
 								    </label>
 							    </div>
 							  </div>
@@ -125,51 +125,51 @@
 								  		<form name="new_row">
 									  		<tr ng-repeat="row in provider.table" ng-if="(row.deposit.account != undefined && provider.type == 'client') || (row.deposit.account == undefined && provider.type == 'provider')">
 									  			<td>
-									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.client.type" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 40px;" class="form-control" maxlength="1" name="" ng-model="row.client.type" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.client.type %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 110px;" class="form-control" name="" ng-model="row.client.number" ng-keyup="findProvider(row.client.number, row)" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 110px;" class="form-control" maxlength="11" name="" ng-model="row.client.number" ng-keyup="findProvider(row.client.number, row)" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.client.number %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 250px;" class="form-control" name="" ng-model="row.client.name" readonly="" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 250px;" class="form-control" maxlength="35" name="" ng-model="row.client.name" readonly="" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.client.name %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.deposit.proform" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 40px;" class="form-control" maxlength="9" name="" ng-model="row.deposit.proform" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.deposit.proform %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.deposit.service" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 40px;" class="form-control" maxlength="3" name="" ng-model="row.deposit.service" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.deposit.service %></span>
 									  			</td>
 													<td ng-if="provider.type == 'client'">
-														<input type="text" style="width: 60px;" class="form-control" name="" ng-model="row.deposit.account" readonly="" required ng-if="row.validated == false || row.validated == undefined">
+														<input type="text" style="width: 60px;" class="form-control" maxlength="11" name="" ng-model="row.deposit.account" readonly="" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.deposit.account %></span>
 													</td>
 									  			<td>
-									  				<input type="text" style="width: 60px;" class="form-control" name="" ng-model="row.deposit.import" ng-keyup="getImport()" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 60px;" class="form-control" maxlength="15" name="" ng-model="row.deposit.import" ng-keyup="getImport()" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.deposit.import %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.deposit.operation" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 40px;" class="form-control" maxlength="2" name="" ng-model="row.deposit.operation" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.deposit.operation %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 80px;" class="form-control" name="" ng-model="row.deposit.period" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 80px;" class="form-control" maxlength="6" name="" ng-model="row.deposit.period" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.deposit.period %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 40px;" class="form-control" name="" ng-model="row.voucher.comprobant" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 40px;" class="form-control" maxlength="2" name="" ng-model="row.voucher.comprobant" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.voucher.comprobant %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 80px;" class="form-control" name="" ng-model="row.voucher.serie" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 80px;" class="form-control" name="" maxlength="4" ng-model="row.voucher.serie" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.voucher.serie %></span>
 									  			</td>
 									  			<td>
-									  				<input type="text" style="width: 60px;" class="form-control" name="" ng-model="row.voucher.comprobant_number" required ng-if="row.validated == false || row.validated == undefined">
+									  				<input type="text" style="width: 60px;" class="form-control" name="" maxlength="8" ng-model="row.voucher.comprobant_number" required ng-if="row.validated == false || row.validated == undefined">
 														<span ng-if="row.validated == true"><% row.voucher.comprobant_number %></span>
 									  			</td>
 													<td class="text-center">

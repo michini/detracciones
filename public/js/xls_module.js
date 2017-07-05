@@ -116,7 +116,7 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 		        		if(error.status = 404){
 		        			toastr.error('RUC mal ingresado o no existe.','Error')
 		        		}
-		        		
+
 		        		console.log(error.status);
 		        	}
 		        );
@@ -366,9 +366,11 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 						function(data) {
 							if(data.data.insert){
 								toastr.success(data.data.msg+' '+data.data.id,'Correcto');
-								$scope.getInsertId = data.data.id
+								$scope.getInsertId = data.data.id;
+								console.log(data.data.id);
+								row.id = data.data.id;
 							}
-							
+
 							row.validated = data.data.insert;
 							console.log(data);
 						},
@@ -383,7 +385,7 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 				if (row.validated == false) {
 					var _new = {
 						method: 'PUT',
-						url: $scope.uri+'/detracciones/'+$scope.getInsertId,
+						url: $scope.uri+'/detracciones/'+row.id,
 						headers: {
 							'X-CSRF-TOKEN': $scope._token
 						},
@@ -408,9 +410,10 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 						function(data) {
 							if(data.data.updated){
 								toastr.success(data.data.msg+' '+data.data.id,'Correcto');
-								$scope.getInsertId = data.data.id
+								$scope.getInsertId = data.data.id;
+								row.id = data.data.id;
+								row.validated = true;
 							}
-							row.validated = data.data.insert;
 						},
 						function(error) {
 							if(!data.data.updated){
@@ -459,7 +462,8 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 								var _operation =  $scope.leading(item.deposit.operation,2);
 								var _comprobant =  $scope.leading(item.voucher.comprobant,2);
 								var _number =  (item.voucher.comprobant_number.length > 8) ? item.voucher.comprobant_number.substr(item.voucher.comprobant_number.length-8,item.voucher.comprobant_number.length) : $scope.leading(item.voucher.comprobant_number,8);
-								var _row = "6"+item.client.number+item.client.name.substr(0,35)+_proform+_service+_account+_import+_operation+item.deposit.period+_comprobant+item.voucher.serie+_number+"\r\n";
+								var text = "";
+								var _row = "6"+item.client.number+text.substr(" ",35)+_proform+_service+_account+_import+_operation+item.deposit.period+_comprobant+item.voucher.serie+_number+"\r\n";
 								_export.to_export += _row;
 							});
 							var data = new Blob([_export.to_export], { type: 'text/plain;charset=utf-8' });
@@ -476,13 +480,17 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 					angular.forEach($scope.provider.table, function(item) {
 						// if (type == 'provider')
 						var _proform = $scope.leading(item.deposit.proform,9);
+						console.log(_proform);
 						var _service = $scope.leading(item.deposit.service,3);
-						var _account = (type == 'client') ? $scope.leading(item.deposit.account,3) : $scope.leading("0",3);
+						console.log($scope.provider.type);
+						var _account = ($scope.provider.type == 'client') ? $scope.leading(item.deposit.account,11) : $scope.leading("0",3);
+						console.log(_account);
 						var _import =  $scope.leading(item.deposit.import,15);
 						var _operation =  $scope.leading(item.deposit.operation,2);
 						var _comprobant =  $scope.leading(item.voucher.comprobant,2);
 						var _number =  (item.voucher.comprobant_number.length > 8) ? item.voucher.comprobant_number.substr(item.voucher.comprobant_number.length-8,item.voucher.comprobant_number.length) : $scope.leading(item.voucher.comprobant_number,8);
-						var _row = "6"+item.client.number+item.client.name.substr(0,35)+_proform+_service+_account+_import+_operation+item.deposit.period+_comprobant+item.voucher.serie+_number+"\r\n";
+						var text = '';
+						var _row = "6"+item.client.number+$scope.leadingSpacing(" ",35)+_proform+_service+_account+_import+_operation+item.deposit.period+_comprobant+item.voucher.serie+_number+"\r\n";
 						$scope.provider.to_export += _row;
 					});
 					var data = new Blob([$scope.provider.to_export], { type: 'text/plain;charset=utf-8' });
@@ -494,6 +502,12 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 	    $scope.leading = function(num, size) {
 		    var s = num+"";
 		    while (s.length < size) s = "0" + s;
+		    return s;
+			};
+
+			$scope.leadingSpacing = function(num, size) {
+		    var s = num+"";
+		    while (s.length < size) s = " " + s;
 		    return s;
 			}
 
