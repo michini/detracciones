@@ -475,7 +475,9 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 				else {
 					$scope.provider.to_export = "";
 					var _header = "";
-					_header += "*"+$scope.provider.ruc+$scope.provider.name.substr(0,35)+$scope.provider.lote+$scope.provider.import;
+					var lote = ($scope.provider.lote.length <=6) ? $scope.leading($scope.provider.lote,6) : $scope.provider.lote.substr(0,6);
+					var provider_name = ($scope.provider.name.length<=35) ? $scope.leadingSpacing($scope.provider.name, 35) : $scope.provider.name.substr(0.35);
+					_header += "*"+$scope.provider.ruc+provider_name+lote+$scope.leading($scope.provider.import,15);
 					$scope.provider.to_export += _header+"\r\n";
 					angular.forEach($scope.provider.table, function(item) {
 						// if (type == 'provider')
@@ -507,7 +509,7 @@ angular.module('xlsApp', ["angular-js-xlsx","ngFileSaver"], function($interpolat
 
 			$scope.leadingSpacing = function(num, size) {
 		    var s = num+"";
-		    while (s.length < size) s = " " + s;
+		    while (s.length < size) s = s + " ";
 		    return s;
 			}
 
